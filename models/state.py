@@ -16,8 +16,17 @@ class State(BaseModel, Base):
     """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade='all, delete, delete-orphan',
-                          backref="state")
+    cities = relationship('City',backref='state', cascade='all, delete')
+
+    # @property
+    # def cities(self):
+    # """Return a list of City instances with matching state_id."""
+    #     from models import storage
+    #     city_list = []
+    #     for city in storage.all('City').values():
+    #         if city.state_id == self.id:
+    #             city_list.append(city)
+    #     return city_list
 
     @property
     def cities(self):

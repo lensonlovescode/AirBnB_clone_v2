@@ -26,7 +26,10 @@ class DBStorage:
         database = getenv('HBNB_MYSQL_DB')
         env = getenv('HBNB_ENV')
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(user, passwd, host, db), pool_pre_ping=True)
+        self.__engine = create_engine(
+          'mysql+mysqldb://{}:{}@{}/{}'.format(user, password, host, database),
+          pool_pre_ping=True
+        )
 
         if env == "test":
             Base.metadata.drop_all(self.__engine)
@@ -66,6 +69,7 @@ class DBStorage:
 
     def reload(self):
         """Reload data and setup the database session."""
+        from models import Base
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session_factory)
