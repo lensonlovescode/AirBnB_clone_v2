@@ -13,10 +13,10 @@ class User(BaseModel, base):
     __tablename__ = users
 
     if getenv(HBNB_TYPE_STORAGE, default="fs") == "db":
-        email = column(String(128), nullable=False)
-        password = column(String(128), nullable=False)
-        first_name = column(String(128), nullable=True)
-        last_name = column(String(128), nullable=True)
+        email = Column(String(128), nullable=False)
+        password = Column(String(128), nullable=False)
+        first_name = Column(String(128), nullable=True)
+        last_name = Column(String(128), nullable=True)
     else:
         email = ""
         password = ""
