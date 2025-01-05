@@ -19,29 +19,31 @@ class DBStorage:
         database = getenv('HBNB_MYSQL_DB')
         env = getenv('HBNB_ENV')
 
-        self.__engine = create_engine(
-            f'mysql+mysqldb://{user}:{password}@{host}/{database}',
-            pool_pre_ping=True
-        )
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
+                                      .format(user, passwd, host, db),
+                                      pool_pre_ping=True)
 
         if env == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Query all objects of a given class or all objects."""
-        objects = {}
+        dic = {}
         if cls:
-            query_results = self.__session.query(cls).all()
-            for obj in query_results:
-                key = f"{obj.__class__.__name__}.{obj.id}"
-                objects[key] = obj
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
         else:
-            for subclass in Base.__subclasses__():
-                query_results = self.__session.query(subclass).all()
-                for obj in query_results:
-                    key = f"{obj.__class__.__name__}.{obj.id}"
-                    objects[key] = obj
-        return objects
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
         """Add an object to the current database session."""
@@ -62,3 +64,8 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session_factory)
+
+    def close(self):
+        """ calls remove()
+        """
+        self.__session.close()

@@ -15,8 +15,8 @@ class State(BaseModel, Base):
         # Database storage: establish relationship with City
         cities = relationship(
             "City",
-            backref="state",
-            cascade="all, delete-orphan"
+            backref='state',
+            cascade='all, delete, delete-orphan'
         )
     else:
         @property
