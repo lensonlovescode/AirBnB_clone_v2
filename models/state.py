@@ -1,27 +1,35 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
+"""This is the state class"""
+from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from models import storage_type
+from sqlalchemy import Column, Integer, String
+import models
 from models.city import City
+import shlex
 
 
 class State(BaseModel, Base):
-    """ State class """
+    """This is the class for State
+    Attributes:
+        name: input name
+    """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    if storage_type == "db":
-        # Database storage: establish relationship with City
-        cities = relationship(
-            "City",
-            backref='state',
-            cascade='all, delete, delete-orphan'
-        )
-    else:
-        @property
-        def cities(self):
-            """Returns a list of City instances with state_id equal to the current State.id."""
-            from models import storage
-            all_cities = storage.all(City)
-            return [city for city in all_cities.values() if city.state_id == self.id]
+    cities = relationship("City", cascade='all, delete, delete-orphan',
+                          backref="state")
+
+    @property
+    def cities(self):
+        var = models.storage.all()
+        lista = []
+        result = []
+        for key in var:
+            city = key.replace('.', ' ')
+            city = shlex.split(city)
+            if (city[0] == 'City'):
+                lista.append(var[key])
+        for elem in lista:
+            if (elem.state_id == self.id):
+                result.append(elem)
+        return (result)
