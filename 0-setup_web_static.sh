@@ -4,9 +4,19 @@
 sudo apt install nginx
 sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
-echo -e "Testing..." | sudo tee /data/web_static/releases/test/index.html > /dev/null
+
+html="<html>
+  <head>
+  </head>
+  <body>
+ALX
+  </body>
+</html>"
+echo -e "$html" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 sudo ln -sfn /data/web_static/releases/test/ /data/web_static/current
-sudo chown -R ubuntu:ubuntu /data/
+
+sudo chown -R ubuntu /data/
+sudo chgrp -R ubuntu /data/
 configuration="server {
 
         listen 80 default_server;
@@ -26,10 +36,6 @@ configuration="server {
 
         location /hbnb_static {
                 alias /data/web_static/current/;
-        }
-
-        location ~ /\.ht {
-               deny all;
         }
 
         error_page 404 /ERROR404.html;
