@@ -28,6 +28,7 @@ def c_route(text):
     """
     Displays “C ” followed by the value of the text variable
     """
+    text = text.replace("_", " ")
     return f"C {escape(text)}"
 
 
