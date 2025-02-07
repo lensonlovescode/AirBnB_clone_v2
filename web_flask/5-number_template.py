@@ -4,6 +4,7 @@ Contains a script that starts a Flask web application 0.0.0.0, port 5000
 """
 from flask import Flask
 from markupsafe import escape
+from flask import render_template
 app = Flask(__name__)
 
 
@@ -40,6 +41,22 @@ def python_route(text='is cool'):
     """
     text = text.replace("_", " ")
     return f"Python {escape(text)}"
+
+
+@app.route('/number/<int:n>', strict_slashes=False)
+def number_route(n):
+    """
+    Displays a HTML page only if n is an integer
+    """
+    return f"{escape(n)} is a number"
+
+
+@app.route('/number_template/<int:n>', strict_slashes=False)
+def number_template(n):
+    """
+    Displays a HTML page only if n is an integer
+    """
+    return render_template('5-number.html', number=n)
 
 
 if __name__ == "__main__":
