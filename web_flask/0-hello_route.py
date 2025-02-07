@@ -12,3 +12,6 @@ def hello_bnb():
     Displays “Hello HBNB!” on route /
     """
     return "Hello HBNB!"
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
