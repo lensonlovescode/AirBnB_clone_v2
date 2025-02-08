@@ -66,12 +66,12 @@ class FileStorage:
             pass
     def delete(self, obj=None):
         """
-        Deletes obj from __objects if it’s inside
-        if obj is equal to None, the method should not do anything
+        deletes obj from __objects if it exists.
+        if obj is None, do nothing.
         """
-        if obj is None:
-            pass
-        else:
-            for key, value in FileStorage.__objects.items():
-                if value is obj:
-                    del FileStorage.__objects[key]
+        if obj is not None:
+            try:
+                key = obj.to_dict()['__class__'] + '.' + obj.id
+                FileStorage.__objects.pop(key)
+            except KeyError:
+                pass
