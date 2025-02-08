@@ -17,7 +17,14 @@ class HBNBCommand(cmd.Cmd):
 
     # determines prompt for interactive/non-interactive modes
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
-
+    valid_classes = ("BaseModel",
+                     "User",
+                     "Place",
+                     "State",
+                     "City",
+                     "Amenity",
+                     "Review"
+                     )
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
                'State': State, 'City': City, 'Amenity': Amenity,
@@ -114,30 +121,49 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """ Create an object of any class"""
+        """
+        Create an object of any class
+        """
         args = arg.split()
         if len(args) < 1:
             print("** class name missing **")
             return
-
+        
         class_name = args[0]
-        if class_name not in HBNBCommand.classes:
+        if class_name not in HBNBCommand.valid_classes:
             print("** class doesn't exist **")
             return
-
-        obj = eval(f"{class_name}()")
-
-        if len(args) > 1:
+        
+        if len(args) == 1:
+            obj = eval(f"{class_name}()")
+            obj.save()
+            print(f"{obj.id}")
+            return
+        
+        elif len(args) >= 2:
+            dict_pass = {}
             for i in range(len(args) - 1):
                 argument = args[i + 1]
-                keyvalue = argument.split("=")
-                key = keyvalue[0]
-                print(key)
-                value = keyvalue[1].replace("\"", "").replace("_", " ")
-                print(value)
+                arr = argument.split("=")
+                key = arr[0]
+                value = arr[1].replace("\"", "")
+                value = value.replace("_", " ")
+                if key in HBNBCommand.types.keys():
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            pass
+                dict_pass[key] = value
+            obj = eval(f"{class_name}()")
+            for key, value in dict_pass.items():
                 setattr(obj, key, value)
-        obj.save()
-        print(f"{obj.id}")
+            obj.save()
+            print(obj.id)
+            return
+                
 
     def help_create(self):
         """ Help information for the create method """
@@ -332,7 +358,6 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
-
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
