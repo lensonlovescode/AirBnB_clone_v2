@@ -15,11 +15,12 @@ class BaseModel:
     """
     A base class for all hbnb models
     """
-    
+
     id = Column(String(60), nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
+
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:
@@ -39,7 +40,8 @@ class BaseModel:
         Returns a string representation of the instance
         """
         cls = self.__class__.__name__
-        attrs = {k: v for k, v in self.__dict__.items() if not k.startswith('_')}
+        attrs = {k: v for k, v in self.__dict__.items()
+                 if not k.startswith('_')}
         return '[{}] ({}) {}'.format(cls, self.id, attrs)
 
     def save(self):
@@ -57,14 +59,16 @@ class BaseModel:
         dictionary.update(self.__dict__)
         dictionary.update({'__class__':
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
-        
+
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
         dictionary.pop('_sa_instance_state')
         return dictionary
+
     def delete(self):
         """
-        Deletes the current instance from the storage (models.storage) by calling the method delete
+        Deletes the current instance from the storage
+        (models.storage) by calling the method delete
         """
         from models import storage
         self.delete()

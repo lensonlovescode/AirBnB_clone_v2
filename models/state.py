@@ -8,23 +8,21 @@ from models.city import City
 from sqlalchemy.orm import relationship
 from os import getenv
 
-#  getter attribute cities that returns the list of City instances with state_id equals
-#     to the current State.id => It will be the FileStorage relationship between State and City
 
 class State(BaseModel, Base):
     """
     State class
     """
-    
+
     __tablename__ = 'states'
-    
+
     if getenv('HBNB_TYPE_STORAGE', default='fs') == 'db':
         name = Column(String(128), nullable=False)
         cities = relationship('City', backref='state', cascade='all, delete')
 
     else:
         name = ""
-        
+
         @property
         def cities(self):
             """

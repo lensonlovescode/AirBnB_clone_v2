@@ -15,7 +15,7 @@ class FileStorage:
     def all(self, cls=None):
         """
         Returns a dictionary of models currently in storage
-        of a specific class if cls is not none  
+        of a specific class if cls is not none
         """
         from models.base_model import BaseModel
         from models.user import User
@@ -72,9 +72,10 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
     def delete(self, obj=None):
         """
         deletes obj from __objects if it exists.
@@ -86,6 +87,7 @@ class FileStorage:
                 FileStorage.__objects.pop(key)
             except KeyError:
                 pass
+
     def close(self):
         """
         Deserializes the JSON file to objects

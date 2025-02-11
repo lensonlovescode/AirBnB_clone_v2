@@ -15,6 +15,7 @@ from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 
+
 class DBStorage():
     """
     Class definition Database storage engine
@@ -31,12 +32,12 @@ class DBStorage():
         host = getenv('HBNB_MYSQL_HOST', 'localhost')
         database = getenv('HBNB_MYSQL_DB')
         env = getenv('HBNB_ENV')
+        eng = f"mysql+mysqldb://{user}:{password}@{host}/{database}"
 
-        self.__engine = create_engine(f"mysql+mysqldb://{user}:{password}@{host}/{database}", pool_pre_ping=True)
+        self.__engine = create_engine(eng, pool_pre_ping=True)
 
         if env == "test":
             Base.metadata.drop_all(self.__engine)
-
 
     def all(self, cls=None):
         """"
@@ -60,7 +61,6 @@ class DBStorage():
                     objects[key] = obj
 
         return objects
-
 
     def new(self, obj):
         """
@@ -88,7 +88,8 @@ class DBStorage():
         """
         from models.base_model import Base
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
         self.__session = scoped_session(session_factory)
 
     def close(self):
