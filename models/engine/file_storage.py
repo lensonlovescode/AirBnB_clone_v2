@@ -77,3 +77,8 @@ class FileStorage:
                 FileStorage.__objects.pop(key)
             except KeyError:
                 pass
+    def close(self):
+        """
+        Deserializes the JSON file to objects
+        """
+        self.reload()
