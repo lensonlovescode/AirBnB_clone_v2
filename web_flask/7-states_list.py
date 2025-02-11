@@ -27,7 +27,7 @@ def application_route():
     Displays all models
     """
     diction = {}
-    for key, value in storage.all().items():
+    for key, value in storage.all('State').items():
         arr = key.split('.')
         name = value.name
         id = arr[1]
