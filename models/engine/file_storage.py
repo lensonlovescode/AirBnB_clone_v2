@@ -17,6 +17,13 @@ class FileStorage:
         Returns a dictionary of models currently in storage
         of a specific class if cls is not none  
         """
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
         if cls is None:
             return FileStorage.__objects
         else:
