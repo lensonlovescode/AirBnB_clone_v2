@@ -10,8 +10,8 @@
             {% for (k, v) in diction.items(): %}
             <LI>{{ v.id }}: <B>{{ v.name }}</B>
                 <UL>
-                    {% for city in v.cities: %}
-                        <LI>{{ city.id }}<B>{{ city.name }}</B></LI>
+                    {% for city in v.cities | sort(attribute='name') %}
+                    <LI>{{ city.id }} <B>{{ city.name }}</B></LI>
                     {% endfor %}
                 </UL>
             </LI>
