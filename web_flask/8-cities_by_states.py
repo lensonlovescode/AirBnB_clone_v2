@@ -2,9 +2,6 @@
 """
 Contains a py script that starts a Flask web application
 """
-import os
-import sys
-sys.path.append(os.path.abspath(".."))
 from models import storage
 from flask import Flask
 from flask import render_template
