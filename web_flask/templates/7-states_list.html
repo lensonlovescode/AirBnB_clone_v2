@@ -5,10 +5,11 @@
     </HEAD>
     <BODY>
         <H1>States</H1>
+        
         <UL>
-        {% for id, item in diction.items() | sort(attribute="name") %}
-            <LI>{{ id }}: <B>{{ item }}</B></LI> 
-        {% endfor %}
+            {% for (k, v) in diction.items(): %}
+            <LI>{{ v.id }}: <B>{{ v.name }}</B></LI> 
+            {% endfor %}
         </UL>
     </BODY>
 </HTML>
