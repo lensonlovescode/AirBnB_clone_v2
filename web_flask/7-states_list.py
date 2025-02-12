@@ -2,13 +2,13 @@
 """
 Contains a py script that starts a Flask web application
 """
+from models import storage
 from flask import Flask
 from flask import render_template
 import sys
 import os
-from models import storage
-sys.path.append(os.path.abspath(".."))
 
+sys.path.append(os.path.abspath(".."))
 
 app = Flask(__name__)
 
@@ -32,7 +32,8 @@ def application_route():
         name = value.name
         id = arr[1]
         diction[id] = name
-    return render_template('7-states_list.html', diction=diction)
+    sorted_diction = dict(sorted(diction.items(), key=lambda item: item[1]))
+    return render_template('7-states_list.html', diction=sorted_diction)
 
 
 if __name__ == '__main__':
